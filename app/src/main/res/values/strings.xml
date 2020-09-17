@@ -10,4 +10,6 @@
     <string name="menu_home">Home</string>
     <string name="menu_explore">Explore</string>
     <string name="menu_recommendations">Recommendations</string>
+
+    <string name="API_KEY">e08a7ebfc3e3928778e1ab8784d9304f</string>
 </resources>
