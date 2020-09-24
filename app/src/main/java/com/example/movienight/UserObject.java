@@ -1,27 +1,28 @@
 package com.example.movienight;
 
-import java.util.Dictionary;
+import java.util.ArrayList;
+
 
 public class UserObject extends Object {
 
     //Class Variables
-    private Dictionary genreValues;
-    private Dictionary actorValues;
-    private String[] watchListTitles;
-    private int watchListIDs;
-
-    private String userName;
-
+    private ArrayList genreValues;
 
     //public void UserObject(){}
-    public void UserObject(String UN){
+    public void UserObject(){
         //Empty
-        this.userName = UN;
     }
 
     //Assignment Methods
+    protected void addGenre(double genreID){
+        this.genreValues.add(genreID);
+    }
 
+    protected void removeGenre(double genreID){
+        this.genreValues.remove(genreID);
+    }
 
-    //Ratio Methods
-
+    public ArrayList getGenreValues(){
+        return this.genreValues;
+    }
 }

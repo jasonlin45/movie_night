@@ -1,11 +1,13 @@
 package com.example.movienight;
 
 
+import android.os.Parcelable;
+
 import org.json.JSONObject;
 
 /*The Movie Object is the object that is stores information
 * retrieved from the api in its most basic forms.*/
-public class MovieObject extends Object{
+public class MovieObject extends Object implements Parcelable {
 
     //Class variables
     private double movieID;
@@ -24,6 +26,7 @@ public class MovieObject extends Object{
         //Turn Json to string
         String unpJason = movieData.toString();
 
+        //movieData.get("");
         //TODO: Parse Jason for private variables
         //this.movieID = 1234; //Get the movie id from the JSON
     }
