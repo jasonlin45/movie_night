@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 /*The Movie Object is the object that is stores information
 * retrieved from the api in its most basic forms.*/
-public class MovieObject extends Object implements Parcelable {
+public class MovieObject extends Object  {
 
     //Class variables
     private double movieID;
