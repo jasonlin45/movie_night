@@ -34,15 +34,15 @@ public class RecommendationsFragment extends Fragment {
 
         MovieObject movie = new MovieObject();
         movie.setPosterPath("http://image.tmdb.org/t/p/w185//6CoRTJTmijhBLJTUNoVSUNxZMEI.jpg");
-        movie.setMovieID(694919);
-        movie.setGenreID(new double[]{28});
+        movie.setMovieID("694919");
+        movie.setGenreID("28");
         movie.setMoviePopularity(2261.976);
         movie.setMovieTitle("Money Plane");
 
         MovieObject movie2 = new MovieObject();
         movie2.setPosterPath("http://image.tmdb.org/t/p/w185//aKx1ARwG55zZ0GpRvU2WrGrCG9o.jpg");
-        movie2.setMovieID(337401);
-        movie2.setGenreID(new double[]{28, 12, 18, 14});
+        movie2.setMovieID("337401");
+        movie2.setGenreID("28, 12, 18, 14");
         movie2.setMoviePopularity(1458.342);
         movie2.setMovieTitle("Mulan");
 
