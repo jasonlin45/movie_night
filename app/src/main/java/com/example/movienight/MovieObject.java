@@ -15,6 +15,8 @@ public class MovieObject extends Object  {
     private boolean adult;
     private String movieTitle;
     private double moviePopularity;
+    private String posterPath;
+
     private JSONObject movieDat;
 
     //Empty constructor
@@ -33,58 +35,66 @@ public class MovieObject extends Object  {
 
     //private double movieID;
     //setID
-    private void setMovieID(double movID){
+    public void setMovieID(double movID){
         this.movieID = movID;
     }
 
     //getId
-    protected double getMovieID(){
+    public double getMovieID(){
         return this.movieID;
     }
 
 
     //    private double genreIDs[];
-    private void setGenreID(double[] genID){
+    public void setGenreID(double[] genID){
         this.genreIDs = genID;
     }
 
-    protected double[] getGenreIDs(){
+    public double[] getGenreIDs(){
         return this.genreIDs;
     }
 
 
     //    private boolean adult;
     //set
-    private void setAdult(boolean adultRating){
+    public void setAdult(boolean adultRating){
         this.adult = adultRating;
     }
 
     //get
-    protected boolean getAdult(){
+    public boolean getAdult(){
         return this.adult;
     }
 
 
     //    private String movieTitle;
     //set
-    private void setMovieTitle(String Title){
+    public void setMovieTitle(String Title){
         this.movieTitle = Title;
     }
 
     //get
-    protected String getMovieTitle(){
+    public String getMovieTitle(){
         return this.movieTitle;
     }
 
 
     //    private double moviePopularity;
     //set
-    private void setMoviePopularity(double Score){
+    public void setMoviePopularity(double Score){
         this.moviePopularity = Score;
     }
 
     //get
-    protected double getMoviePopularity(){
+    public double getMoviePopularity(){
         return this.moviePopularity;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 }
