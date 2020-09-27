@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 public class MovieServiceTest {
 
+    /*
     @Test
     public void movieGetRequest() throws JSONException {
         MovieService service = new MovieService();
@@ -19,7 +20,9 @@ public class MovieServiceTest {
         assertNotNull(j);
         assertEquals("Kill Bill: Vol. 1", j.getString("title"));
     }
+     */
 
+    /*
     @Test
     public void searchMovieGetRequest() throws IOException, JSONException {
         MovieService service = new MovieService();
@@ -39,4 +42,5 @@ public class MovieServiceTest {
 
         }
     }
+    */
 }

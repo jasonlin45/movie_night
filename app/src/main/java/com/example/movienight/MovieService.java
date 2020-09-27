@@ -41,7 +41,12 @@ public class MovieService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
-
+        // Makes a request to TMDb
+        try {
+            searchForMovies();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // If we get killed, after returning from here, restart
         return START_STICKY;
@@ -61,7 +66,7 @@ public class MovieService extends Service {
     /*
       Gets information from tMDB about a specific movie by its id
      */
-    public JSONObject movieGetRequest(String id){
+    private JSONObject movieGetRequest(String id){
         String search = "https://api.themoviedb.org/3/movie/" + id +
                 "?api_key=" + API_KEY + "&language=en-US";
 
@@ -85,7 +90,7 @@ public class MovieService extends Service {
     TODO Make private?
 
      */
-    public JSONObject searchMovieGetRequest() {
+    private JSONObject searchMovieGetRequest() {
         String sort = "popularity.desc";
         String adult = "false";
         String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY +
@@ -141,7 +146,7 @@ public class MovieService extends Service {
     Recieves a request for a list of movies.
     TODO Add parameters
      */
-    public void searchForMovies() throws JSONException {
+    private void searchForMovies() throws JSONException {
         ArrayList<MovieObject> movies = new ArrayList<MovieObject>();
         JSONObject j = searchMovieGetRequest();
         JSONArray listOfMovies = j.getJSONArray("results");
