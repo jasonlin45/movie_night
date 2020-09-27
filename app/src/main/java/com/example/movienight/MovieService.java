@@ -6,6 +6,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.movienight.ui.recommendations.RecommendationsFragment;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,9 +19,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 
 
 public class MovieService extends Service {
+
+    // API_KEY needs to be protected information
+    static final String API_KEY = "e08a7ebfc3e3928778e1ab8784d9304f";
+
 
     @Override
     public void onCreate() {
@@ -55,34 +63,38 @@ public class MovieService extends Service {
      */
     public JSONObject movieGetRequest(String id){
         String search = "https://api.themoviedb.org/3/movie/" + id +
-                "?api_key=e08a7ebfc3e3928778e1ab8784d9304f&language=en-US";
+                "?api_key=" + API_KEY + "&language=en-US";
 
         try {
-            JSONObject j = makeRequest(search);
-            return j;
+            return makeRequest(search);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+
+    /*
+    Takes the movie list json and turns it into a parcelable array
+     */
+
     /*
     Gets a list of movies
-    e08a7ebfc3e3928778e1ab8784d9304f is the api key
     TODO add error handling
     TODO add parameters and customization
+    TODO Make private?
+
      */
     public JSONObject searchMovieGetRequest() {
         String sort = "popularity.desc";
         String adult = "false";
-        String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + "e08a7ebfc3e3928778e1ab8784d9304f"+
+        String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY +
                 "&language=en-US&" + "sort_by=" + sort +
                 "&include_adult=" + adult +
                 "&page=1";
 
         try {
-            JSONObject j = makeRequest(search);
-            return j;
+            return makeRequest(search);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,8 +127,6 @@ public class MovieService extends Service {
 
             } in.close();
 
-            // print result
-
             try {
                 return new JSONObject(data.toString());
             } catch (JSONException e) {
@@ -125,6 +135,27 @@ public class MovieService extends Service {
 
         }
         return null;
+    }
+
+    /*
+    Recieves a request for a list of movies.
+    TODO Add parameters
+     */
+    public void searchForMovies() throws JSONException {
+        ArrayList<MovieObject> movies = new ArrayList<MovieObject>();
+        JSONObject j = searchMovieGetRequest();
+        JSONArray listOfMovies = j.getJSONArray("results");
+        for (int i = 0; i < 10; ++i) {
+            JSONObject rec = listOfMovies.getJSONObject(i);
+            movies.add(new MovieObject(rec));
+        }
+
+        // TODO Add which class the intent goes to
+        MovieList moviesToDisplay = new MovieList(movies);
+        Intent intent = new Intent(getBaseContext(), RecommendationsFragment.class);
+        intent.putExtra("movie_list", moviesToDisplay);
+        startActivity(intent);
+
     }
 
 }
