@@ -90,7 +90,7 @@ public class MovieService extends Service {
     TODO Make private?
 
      */
-    private JSONObject searchMovieGetRequest() {
+    public JSONObject searchMovieGetRequest() {
         String sort = "popularity.desc";
         String adult = "false";
         String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY +
