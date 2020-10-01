@@ -4,6 +4,7 @@ package com.example.movienight;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -33,11 +34,11 @@ public class MovieObject extends Object implements Parcelable {
         this.posterPath = movieData.getString("poster_path");
         String popularity = movieData.getString("popularity");
         this.moviePopularity = Double.valueOf(popularity);
-
+        this.movieTitle = movieData.getString("title");
         //Get Boolean
         this.madult = false;
         String adult = movieData.getString("adult");
-        if (adult == "true"){ this.madult = true;}
+        if (adult.equals("true")){ this.madult = true;}
 
         //Set genre ids
         this.genreIDs = movieData.getString("genre_ids");
@@ -112,7 +113,7 @@ public class MovieObject extends Object implements Parcelable {
     // 99.9% of the time you can just ignore this
     @Override
     public int describeContents() {
-        return 0;
+        return hashCode();
     }
 
     // write your object's data to the passed-in Parcel
@@ -120,12 +121,11 @@ public class MovieObject extends Object implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(movieID);
-        out.writeString(movieTitle);
-        out.writeString(posterPath);
         out.writeString(genreIDs);
         out.writeBoolean(madult);
+        out.writeString(movieTitle);
         out.writeDouble(moviePopularity);
-
+        out.writeString(posterPath);
     }
 
 
@@ -133,11 +133,11 @@ public class MovieObject extends Object implements Parcelable {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     protected MovieObject(Parcel in){
         movieID = in.readString();
-        movieTitle = in.readString();
-        posterPath = in.readString();
         genreIDs = in.readString();
         madult = in.readBoolean();
+        movieTitle = in.readString();
         moviePopularity = in.readDouble();
+        posterPath = in.readString();
 
     }
     // Reconstruct class from parcel constructors

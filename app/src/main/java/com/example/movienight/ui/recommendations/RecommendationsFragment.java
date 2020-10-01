@@ -1,7 +1,12 @@
 package com.example.movienight.ui.recommendations;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Movie;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +21,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.movienight.MovieList;
 import com.example.movienight.MovieObject;
+import com.example.movienight.MovieService;
 import com.example.movienight.R;
 
 import java.util.ArrayList;
@@ -24,12 +31,36 @@ import java.util.ArrayList;
 public class RecommendationsFragment extends Fragment {
 
     private RecommendationsViewModel recommendationsViewModel;
-    private ArrayList<MovieObject> movies;
+    private ArrayList<MovieObject> movies = new ArrayList<>();
     ViewPager2 viewPager;
     MovieCollectionAdapter movieCollectionAdapter;
 
+    private Intent intent;
+
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            MovieList moviesListObject = intent.getParcelableExtra("movie_list");
+            movies = moviesListObject.getMovies();
+
+            Log.v("MOVIE", movies.get(0).getMovieTitle());
+            //MovieObject movie = intent.getParcelableExtra("movie_list");
+            //Log.v("MOVIE", movie.getMovieTitle());
+            build();
+        }
+    };
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        getActivity().registerReceiver(receiver, new IntentFilter(
+                MovieService.MOVIES
+        ));
+        intent = new Intent(getActivity(), MovieService.class);
+        getActivity().startService(intent);
+
+        /**
         movies = new ArrayList<>();
 
         MovieObject movie = new MovieObject();
@@ -47,9 +78,7 @@ public class RecommendationsFragment extends Fragment {
         movie2.setMovieTitle("Mulan");
 
         movies.add(movie);
-        movies.add(movie2);
-
-
+        movies.add(movie2);**/
 
         recommendationsViewModel =
                 ViewModelProviders.of(this).get(RecommendationsViewModel.class);
@@ -58,10 +87,20 @@ public class RecommendationsFragment extends Fragment {
         return root;
     }
 
+    private void build() {
+        movieCollectionAdapter = new MovieCollectionAdapter(this, movies);
+        viewPager = this.getView().findViewById(R.id.viewPager);
+        viewPager.setAdapter(movieCollectionAdapter);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        movieCollectionAdapter = new MovieCollectionAdapter(this, movies);
-        viewPager = view.findViewById(R.id.viewPager);
-        viewPager.setAdapter(movieCollectionAdapter);
+        this.build();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(intent);
     }
 }
