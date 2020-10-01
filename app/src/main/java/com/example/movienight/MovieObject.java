@@ -11,13 +11,17 @@ import androidx.annotation.RequiresApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import java.util.ArrayList;
+
 /*The Movie Object is the object that is stores information
 * retrieved from the api in its most basic forms.*/
-public class MovieObject extends Object implements Parcelable {
+public class MovieObject implements Parcelable {
 
     //Class variables
     private String movieID;
-    private String genreIDs;
+    private int[] genreIDs;
     private boolean madult;
     private String movieTitle;
     private double moviePopularity;
@@ -41,7 +45,34 @@ public class MovieObject extends Object implements Parcelable {
         if (adult.equals("true")){ this.madult = true;}
 
         //Set genre ids
-        this.genreIDs = movieData.getString("genre_ids");
+        //First we get the string of the genre from the JSON
+        String gIDs = movieData.getString("genre_ids");
+
+        ArrayList<Integer> tempStore = new ArrayList<Integer>(); //Temporary Array List to store Ids
+
+        //Parse the string
+        String[] tokens = gIDs.split("id"); //Split the string up in the locus of the id #
+
+        //Iterate through our token
+        for (String subT : tokens){
+            if (subT.contains(": ")){                            //Logic to ignore start token
+                String substep = subT.substring(2);              //First remove the front of the string
+                String[] substep2 = substep.split(",");    //then remove the back of the string and pick out string id
+                String id = substep2[0];
+                int ID = Integer.parseInt(id);
+                tempStore.add(ID);                               //Store in temp
+            }
+        }
+        //The size our array needs to be is the len of tempStore
+        int size = tempStore.size();
+        int index = 0;
+        this.genreIDs = new int[size];
+        //Iterate and move values from temp store to genreIDs
+        for (int idVal : tempStore){
+            this.genreIDs[index] = idVal;
+            index += 1;
+        }
+
     }
 
     //private double movieID;
@@ -57,11 +88,11 @@ public class MovieObject extends Object implements Parcelable {
 
 
     //    private double genreIDs[];
-    public void setGenreID(String genID){
+    public void setGenreID(int[] genID){
         this.genreIDs = genID;
     }
 
-    public String getGenreIDs(){
+    public int[] getGenreIDs(){
         return this.genreIDs;
     }
 
@@ -121,7 +152,7 @@ public class MovieObject extends Object implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(movieID);
-        out.writeString(genreIDs);
+        out.writeIntArray(genreIDs);
         out.writeBoolean(madult);
         out.writeString(movieTitle);
         out.writeDouble(moviePopularity);
@@ -133,7 +164,7 @@ public class MovieObject extends Object implements Parcelable {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     protected MovieObject(Parcel in){
         movieID = in.readString();
-        genreIDs = in.readString();
+        genreIDs = in.createIntArray();
         madult = in.readBoolean();
         movieTitle = in.readString();
         moviePopularity = in.readDouble();
