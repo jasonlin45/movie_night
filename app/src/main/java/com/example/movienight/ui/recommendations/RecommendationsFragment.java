@@ -105,5 +105,6 @@ public class RecommendationsFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         getActivity().stopService(intent);
+        getActivity().unregisterReceiver(receiver);
     }
 }
