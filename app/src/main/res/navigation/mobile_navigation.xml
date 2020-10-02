@@ -22,4 +22,11 @@
         android:name="com.example.movienight.ui.recommendations.RecommendationsFragment"
         android:label="@string/menu_recommendations"
         tools:layout="@layout/fragment_recommendations" />
+
+    <fragment
+        android:id="@+id/nav_preferences"
+        android:name="com.example.movienight.ui.preferences.PreferenceFragment"
+        android:label="@string/menu_preferences"
+        tools:layout="@layout/fragment_genre" />
+
 </navigation>
