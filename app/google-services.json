@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "881031806606",
+    "firebase_url": "https://movienight-e19d4.firebaseio.com",
+    "project_id": "movienight-e19d4",
+    "storage_bucket": "movienight-e19d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881031806606:android:88827b204686bf7c9953df",
+        "android_client_info": {
+          "package_name": "com.example.movienight"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881031806606-6mnrufv23vfrrds7enpo5gkoj04jumo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxLNKXhdUgZ8uc53ZeFZKgN5Xff29ftJM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881031806606-6mnrufv23vfrrds7enpo5gkoj04jumo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

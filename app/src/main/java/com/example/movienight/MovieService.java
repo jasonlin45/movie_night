@@ -29,7 +29,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MovieService extends Service {
 
-    // API_KEY needs to be protected information
+    // TODO API_KEY needs to be protected information
     static final String API_KEY = "e08a7ebfc3e3928778e1ab8784d9304f";
     public static final String MOVIES = "com.example.movienight.ui.recommendations.receiver";
 
@@ -110,16 +110,12 @@ public class MovieService extends Service {
 
     }
 
-    /*
-    Takes the movie list json and turns it into a parcelable array
-     */
 
     /*
     Gets a list of movies
     TODO add error handling
     TODO add parameters and customization
     TODO Make private?
-
      */
     public JSONObject searchMovieGetRequest() {
         String sort = "popularity.desc";
