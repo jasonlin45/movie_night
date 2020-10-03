@@ -21,6 +21,7 @@ public class WebViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
         WebView wv = (WebView) findViewById(R.id.pop_webview);
+        wv.getSettings().setJavaScriptEnabled(false);
         wv.setWebViewClient(new WebViewClient());
         Bundle bd = getIntent().getExtras();
         final String url = bd.getString(Intent.EXTRA_TEXT);
