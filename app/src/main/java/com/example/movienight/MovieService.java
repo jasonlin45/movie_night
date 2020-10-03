@@ -27,6 +27,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 
@@ -124,7 +125,11 @@ public class MovieService extends Service {
         String sort = "popularity.desc";
         String adult = "false";
         GenreService gs = new GenreService(this.getBaseContext());
-        List<Genre> genres = gs.readFileOnInternalStorage(getBaseContext(), "storageFile");
+        Map<Integer, String> genreMap = gs.readFileOnInternalStorage(getBaseContext(), "storageFile");
+        List<Genre> genres = new ArrayList<>();
+        for(Map.Entry<Integer, String> entry: genreMap.entrySet()){
+            genres.add(new Genre(entry.getKey(),entry.getValue()));
+        }
 
         String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY +
                 "&language=en-US&" + "sort_by=" + sort +
