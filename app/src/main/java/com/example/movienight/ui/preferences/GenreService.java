@@ -80,7 +80,7 @@ public class GenreService extends AsyncTask<String, Integer, String> {
     }
 
     public String getApiKey() {
-        return apiKey;
+        return readAPIFileOnInternalStorage(context, apiKeyFileName);
     }
 
     public void setApiKey(String apiKey) {

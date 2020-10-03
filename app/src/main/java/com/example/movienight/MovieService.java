@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.movienight.ui.preferences.Genre;
 import com.example.movienight.ui.preferences.GenreService;
 import com.example.movienight.ui.recommendations.RecommendationsFragment;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,13 +28,12 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 
 public class MovieService extends Service {
 
-    // TODO API_KEY needs to be protected information
-    static final String API_KEY = "e08a7ebfc3e3928778e1ab8784d9304f";
     public static final String MOVIES = "com.example.movienight.ui.recommendations.receiver";
 
     @Override
@@ -75,8 +75,9 @@ public class MovieService extends Service {
       Gets information from tMDB about a specific movie by its id
      */
     private JSONObject movieGetRequest(String id) {
+        GenreService gs = new GenreService(getApplicationContext());
         String search = "https://api.themoviedb.org/3/movie/" + id +
-                "?api_key=" + API_KEY + "&language=en-US";
+                "?api_key=" + gs.getApiKey() + "&language=en-US";
 
         try {
             DownloadMovieTask download = new DownloadMovieTask();
@@ -124,9 +125,14 @@ public class MovieService extends Service {
         String sort = "popularity.desc";
         String adult = "false";
         GenreService gs = new GenreService(this.getBaseContext());
-        List<Genre> genres = gs.readFileOnInternalStorage(getBaseContext(), "storageFile");
+        Map<Integer, String> genreMap = gs.readFileOnInternalStorage(getBaseContext(), "storageFile");
+        List<Genre> genres = new ArrayList<>();
+        for(Map.Entry<Integer, String> entry: genreMap.entrySet()){
+            genres.add(new Genre(entry.getKey(),entry.getValue()));
+        }
 
-        String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY +
+        Log.d("REMOVETHIS_APIKey",gs.getApiKey());
+        String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + gs.getApiKey() +
                 "&language=en-US&" + "sort_by=" + sort +
                 "&include_adult=" + adult +
                 "&page=1";

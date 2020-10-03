@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.example.movienight.ui.preferences.GenreService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
-    //private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +62,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // ...
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        SharedPreferences preferences = getSharedPreferences("PREFS_NAME", 0);
         Log.d(TAG,"authenticating");
         authenticateAnonymously();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        //TODO Destroy string the api_key is loaded onto.
-    }
     public void authenticateAnonymously() {
         mAuth.signInAnonymously()
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -98,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        // ...
                     }
                 });
     }
@@ -125,29 +115,24 @@ public class MainActivity extends AppCompatActivity {
      */
     private void getApiKey(FirebaseUser user) throws IOException {
         //Code to get api key from FireBase server
-        // ...
-        Log.d(TAG, mAuth.getCurrentUser().toString());
-        Task<GetTokenResult> token = mAuth.getCurrentUser().getIdToken(true);
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUser.getIdToken(true)
+        user.getIdToken(true)
             .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                 public void onComplete(@NonNull Task<GetTokenResult> task) {
                     if (task.isSuccessful()) {
                         String idToken = task.getResult().getToken();
-                        // Send token to your backend via HTTPS
-                        // ...
                         try {
                             String search = "https://movienight-e19d4.firebaseio.com/api-key.json?auth="+idToken;
                             DownloadApiTask download = new DownloadApiTask();
                             String ApiKey = download.execute(search).get();
-                            //TODO Store ApiKey from this function.
-                            //TODO Add to shared preferences
+                            // Store ApiKey
+                            GenreService g = new GenreService(getApplicationContext());
+                            g.setApiKey(ApiKey);
 
                         } catch (ExecutionException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     } else {
-                        // Handle error -> task.getException();
+                        task.getException();
                     }
                 }
             });
@@ -175,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
             connection.setRequestMethod("GET");
             int responseCode = connection.getResponseCode();
-            System.out.println(responseCode);
+            Log.d("ResponseCode",String.valueOf(responseCode));
 
             String readLine = null;
 
@@ -193,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 in.close();
 
-                Log.v("RETRIEVED DATA", data.toString());
                 return data.toString();
 
             }
