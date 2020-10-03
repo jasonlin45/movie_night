@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.movienight.R;
@@ -32,7 +33,9 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class GenreService extends AsyncTask<String, Integer, String> {
@@ -139,6 +142,7 @@ public class GenreService extends AsyncTask<String, Integer, String> {
 
 
     }
+
     public void writeFileOnInternalStorage(Context mcoContext, String sFileName, String sBody){
         File dir = new File(mcoContext.getFilesDir(), "mydir");
         if(!dir.exists()){
@@ -165,9 +169,29 @@ public class GenreService extends AsyncTask<String, Integer, String> {
             e.printStackTrace();
         }
     }
-    public List<Genre> readFileOnInternalStorage(Context context, String sFileName){
+
+    public void writeFileFromList(Context context, String sFileName, Map<Integer, String> genres){
+        try {
+            Path p = Paths.get(context.getFilesDir().toString(), "mydir", sFileName);
+            sFileName = p.toString();
+            File currentFile = new File(sFileName);
+            BufferedWriter output = new BufferedWriter(new FileWriter(currentFile));
+            for (Map.Entry<Integer, String> entry: genres.entrySet()) {
+                String tempString = entry.getValue() + "|" + entry.getKey();
+                output.append(tempString);
+                output.newLine();
+            }
+            output.flush();
+            output.close();
+        }
+        catch(Exception e){
+            Log.i("Error", "No Stores Preferences: " + e);
+        }
+    }
+
+    public Map<Integer, String> readFileOnInternalStorage(Context context, String sFileName){
         BufferedReader br = null;
-        List<Genre> storedGenres = new ArrayList<>();
+        Map<Integer, String> storedGenres = new HashMap<>();
         try
         {
             Path p = Paths.get(context.getFilesDir().toString(), "mydir",sFileName);
@@ -178,10 +202,8 @@ public class GenreService extends AsyncTask<String, Integer, String> {
             {
                 String[] genreArray = line.split("\\|");
                 Genre g = new Genre(Integer.parseInt(genreArray[1]), genreArray[0]);
-                storedGenres.add(g);
-
+                storedGenres.put(g.getId(), g.getName());
             }
-
             br.close();
         }
         catch (Exception e)
@@ -189,8 +211,8 @@ public class GenreService extends AsyncTask<String, Integer, String> {
             Log.i("Error", "Storage File Not Found: " + e);
         }
         return storedGenres;
-
     }
+
     public String readAPIFileOnInternalStorage(Context context, String sFileName){
         StringBuilder text = new StringBuilder();
         BufferedReader br = null;
@@ -215,5 +237,36 @@ public class GenreService extends AsyncTask<String, Integer, String> {
         return text.toString();
 
     }
+
+    public void removeGenreFromFile(Context mcoContext, String sFileName, String sBody){
+
+        File dir = new File(mcoContext.getFilesDir(), "mydir");
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+        Map<Integer, String>  genreMap = readFileOnInternalStorage(mcoContext, sFileName);
+
+        String[] genreArray = sBody.split("\\|");
+        Genre g = new Genre(Integer.parseInt(genreArray[1]), genreArray[0]);
+        genreMap.remove(g.getId());
+
+        writeFileFromList(mcoContext, sFileName, genreMap);
+
+    }
+
+    public void populateView(Context context, String sFileName, TextView textView){
+        Map<Integer, String> contents = readFileOnInternalStorage(context, sFileName);
+        StringBuffer display = new StringBuffer();
+        for (Map.Entry<Integer, String> entry: contents.entrySet()) {
+            display.append(entry.getValue() + " \n");
+        }
+        if(contents.isEmpty()){
+            textView.setText("No Preferences Selected");
+        }
+        else {
+            textView.setText(display.toString());
+        }
+    }
+
 
 }

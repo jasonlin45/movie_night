@@ -2,6 +2,7 @@ package com.example.movienight.ui.preferences;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -56,6 +58,10 @@ public class PreferenceFragment extends Fragment {
         genreService.setControl(customSpinner);
         genreService.execute();
 
+        final TextView preferenceTextView = root.findViewById(R.id.textViewGenres);
+        preferenceTextView.setMovementMethod(new ScrollingMovementMethod());
+
+
         customSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -67,12 +73,19 @@ public class PreferenceFragment extends Fragment {
             }
         });
 
-        Button button = root.findViewById(R.id.button_id);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button button_Save = root.findViewById(R.id.buttonSave);
+        button_Save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 genreService.writeFileOnInternalStorage(getContext(), storageFile, getSelectedGenre(root));
-                List<Genre> contents = genreService.readFileOnInternalStorage(getContext(), storageFile);
-                Log.i("current contents: ", contents.toString());
+                genreService.populateView(getContext(), storageFile, preferenceTextView);
+            }
+        });
+        Button button_Remove = root.findViewById(R.id.buttonRemove);
+        button_Remove.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                genreService.removeGenreFromFile(getContext(), storageFile, getSelectedGenre(root));
+                genreService.populateView(getContext(), storageFile, preferenceTextView);
+
             }
         });
         return root;
