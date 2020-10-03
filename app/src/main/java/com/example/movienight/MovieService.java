@@ -10,6 +10,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.movienight.ui.preferences.Genre;
+import com.example.movienight.ui.preferences.GenreService;
 import com.example.movienight.ui.recommendations.RecommendationsFragment;
 
 import org.json.JSONArray;
@@ -24,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
@@ -120,11 +123,17 @@ public class MovieService extends Service {
     public JSONObject searchMovieGetRequest() {
         String sort = "popularity.desc";
         String adult = "false";
+        GenreService gs = new GenreService(this.getBaseContext());
+        List<Genre> genres = gs.readFileOnInternalStorage(getBaseContext(), "storageFile");
+
         String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY +
                 "&language=en-US&" + "sort_by=" + sort +
                 "&include_adult=" + adult +
                 "&page=1";
-
+        search+="&with_genres=" + genres.get(0).getId();
+        for(int i = 1; i < genres.size(); i++) {
+            search += "," + genres.get(i).getId();
+        }
         try {
             DownloadMovieTask download = new DownloadMovieTask();
             return download.execute(search).get();
