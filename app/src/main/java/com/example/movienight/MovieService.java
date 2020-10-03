@@ -47,7 +47,7 @@ public class MovieService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
         // Makes a request to TMDb
         try {
@@ -68,7 +68,7 @@ public class MovieService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
     /*
@@ -83,10 +83,8 @@ public class MovieService extends Service {
             DownloadMovieTask download = new DownloadMovieTask();
             return download.execute(search).get();
         } catch (InterruptedException e) {
-            Log.v("ASYNC BOMB", "FAIL");
             e.printStackTrace();
         } catch (ExecutionException e) {
-            Log.v("ASYNC BOMB", "FAIL2");
             e.printStackTrace();
         }
         return null;
@@ -102,10 +100,8 @@ public class MovieService extends Service {
         JSONArray listOfMovies = j.getJSONArray("results");
         for (int i = 0; i < 10; ++i) {
             JSONObject rec = listOfMovies.getJSONObject(i);
-            Log.v("REC OBJECT", rec.toString());
             movies.add(new MovieObject(rec));
         }
-        Log.v("MOVIE TEST", movies.get(0).getMovieTitle());
         // TODO Add which class the intent goes to
         MovieList moviesToDisplay = new MovieList(movies);
         Intent intent = new Intent(MOVIES);
@@ -131,7 +127,6 @@ public class MovieService extends Service {
             genres.add(new Genre(entry.getKey(),entry.getValue()));
         }
 
-        Log.d("REMOVETHIS_APIKey",gs.getApiKey());
         String search = "https://api.themoviedb.org/3/discover/movie?api_key=" + gs.getApiKey() +
                 "&language=en-US&" + "sort_by=" + sort +
                 "&include_adult=" + adult +
@@ -194,7 +189,6 @@ public class MovieService extends Service {
                 in.close();
 
                 try {
-                    Log.v("RETRIEVED DATA", data.toString());
                     return new JSONObject(data.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();

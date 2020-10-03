@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.movienight.R;
-import com.example.movienight.ui.explore.ExploreViewModel;
 import com.example.movienight.ui.recommendations.MovieCollectionAdapter;
 
 import java.io.File;

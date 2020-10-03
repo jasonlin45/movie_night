@@ -12,12 +12,6 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_explore"
-        android:name="com.example.movienight.ui.explore.ExploreFragment"
-        android:label="@string/menu_explore"
-        tools:layout="@layout/fragment_explore" />
-
-    <fragment
         android:id="@+id/nav_recommendations"
         android:name="com.example.movienight.ui.recommendations.RecommendationsFragment"
         android:label="@string/menu_recommendations"
