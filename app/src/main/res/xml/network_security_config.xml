@@ -2,8 +2,15 @@
 <network-security-config>
     <domain-config>
         <domain includeSubdomains="true">https://www.themoviedb.org/</domain>
-        <!--<pin-set>
-            <pin digest="SHA-256"></pin>
-        </pin-set>-->
+        
+        <pin-set>
+            <pin digest="SHA-256">HkCBucsA3Tgiby96X7vjb/ojHaE1BrjvZ2+LRdJJd0E=</pin>
+        </pin-set>
+    </domain-config>
+    <domain-config>
+        <domain includeSubdomains="true">https://movienight-e19d4.firebaseio.com/</domain>
+        <pin-set>
+            <pin digest="SHA-256">9FgNEyRvg6Tf2vu79a9m9kM0J1TtnItUhTxrQRZs9pI=</pin>
+        </pin-set>
     </domain-config>
 </network-security-config>
