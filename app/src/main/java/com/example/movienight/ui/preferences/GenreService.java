@@ -41,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 public class GenreService extends AsyncTask<String, Integer, String> {
 
     static final String BASE_URL = "https://api.themoviedb.org/3/genre/movie";
-    private String apiKey;
     private final String apiKeyFileName = "myApiKeyFile";
     private List<Genre> genres;
     private Context context;
@@ -84,19 +83,13 @@ public class GenreService extends AsyncTask<String, Integer, String> {
     }
 
     public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+        writeApiKeyOnInternalStorage(context, apiKeyFileName, apiKey);
     }
 
     public String getGenre() {
 
-        apiKey = readAPIFileOnInternalStorage(context, apiKeyFileName); //
-        //=========================================================================================
-        //This section needs to be removed after the APIKey is always made available in the in-app storage file
-        if(apiKey.equals("")){
-            writeFileOnInternalStorage(context, apiKeyFileName, "e08a7ebfc3e3928778e1ab8784d9304f");
-        }
-        apiKey = readAPIFileOnInternalStorage(context, apiKeyFileName);
-        //=========================================================================================
+        String apiKey = readAPIFileOnInternalStorage(context, apiKeyFileName); //
+
         if(apiKey.equals("")) {
             return "{}";
         }
@@ -105,6 +98,7 @@ public class GenreService extends AsyncTask<String, Integer, String> {
         try {
 
             URL url = new URL(BASE_URL + "/list?api_key=" + apiKey + "&language=en-US");
+            Log.d("URL",BASE_URL + "/list?api_key=" + apiKey + "&language=en-US");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -137,7 +131,7 @@ public class GenreService extends AsyncTask<String, Integer, String> {
         }
 
 
-
+        apiKey = "Overwrite";
         return genreString.toString();
 
 
@@ -165,6 +159,24 @@ public class GenreService extends AsyncTask<String, Integer, String> {
                 output.flush();
                 output.close();
             }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void writeApiKeyOnInternalStorage(Context mcoContext, String sFileName, String sBody){
+        File dir = new File(mcoContext.getFilesDir(), "mydir");
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+
+        try {
+            File file = new File(mcoContext.getFilesDir()+"/mydir", sFileName);
+            BufferedWriter output = new BufferedWriter(new FileWriter(file));
+            output.append(sBody);
+            output.newLine();
+            output.flush();
+            output.close();
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -234,7 +246,9 @@ public class GenreService extends AsyncTask<String, Integer, String> {
         {
             Log.i("Error", "Storage File Not Found: " + e);
         }
-        return text.toString();
+        // Remove quotations from string
+        String s  = text.substring(1, text.length() - 1);
+        return s;
 
     }
 
