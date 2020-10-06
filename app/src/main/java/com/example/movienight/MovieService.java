@@ -131,9 +131,11 @@ public class MovieService extends Service {
                 "&language=en-US&" + "sort_by=" + sort +
                 "&include_adult=" + adult +
                 "&page=1";
-        search+="&with_genres=" + genres.get(0).getId();
-        for(int i = 1; i < genres.size(); i++) {
-            search += "," + genres.get(i).getId();
+        if(genres.size()>0) {
+            search += "&with_genres=" + genres.get(0).getId();
+            for(int i = 1; i < genres.size(); i++) {
+                search += "," + genres.get(i).getId();
+            }
         }
         try {
             DownloadMovieTask download = new DownloadMovieTask();

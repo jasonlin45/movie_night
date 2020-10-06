@@ -45,7 +45,6 @@ public class RecommendationsFragment extends Fragment {
             MovieList moviesListObject = intent.getParcelableExtra("movie_list");
             movies = moviesListObject.getMovies();
 
-            Log.v("MOVIE", movies.get(0).getMovieTitle());
             //MovieObject movie = intent.getParcelableExtra("movie_list");
             //Log.v("MOVIE", movie.getMovieTitle());
             build();
