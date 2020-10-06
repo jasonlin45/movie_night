@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MovieService extends Service {
 
-    public static final String MOVIES = "com.example.movienight.ui.recommendations.receiver";
+    public static final String MOVIES = "com.example.movienight.MovieService.MOVIES";
 
     @Override
     public void onCreate() {

@@ -98,7 +98,6 @@ public class GenreService extends AsyncTask<String, Integer, String> {
         try {
 
             URL url = new URL(BASE_URL + "/list?api_key=" + apiKey + "&language=en-US");
-            Log.d("URL",BASE_URL + "/list?api_key=" + apiKey + "&language=en-US");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");

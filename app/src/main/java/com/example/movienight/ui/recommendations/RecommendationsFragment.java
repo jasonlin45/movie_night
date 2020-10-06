@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -27,6 +28,13 @@ import com.example.movienight.MovieService;
 import com.example.movienight.R;
 
 import java.util.ArrayList;
+
+class MovieReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        return;
+    }
+}
 
 public class RecommendationsFragment extends Fragment {
 
@@ -38,7 +46,7 @@ public class RecommendationsFragment extends Fragment {
     private Intent intent;
 
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    public BroadcastReceiver receiver = new MovieReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -53,9 +61,10 @@ public class RecommendationsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        getActivity().registerReceiver(receiver, new IntentFilter(
-                MovieService.MOVIES
-        ));
+        getActivity().registerReceiver(
+                receiver,
+                new IntentFilter(MovieService.MOVIES)
+        );
         intent = new Intent(getActivity(), MovieService.class);
         getActivity().startService(intent);
 

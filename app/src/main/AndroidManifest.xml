@@ -27,8 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
             </intent-filter>
+
         </activity>
-        <service android:name="com.example.movienight.MovieService"></service>
+        <service android:name="com.example.movienight.MovieService"
+                 android:exported="false"
+                 android:permission="com.example.movienight.BROADCAST_PERMISSION"></service>
+    <receiver
+        android:name="com.example.movienight.ui.recommendations.MovieReceiver"
+        android:exported="false">
+        <intent-filter>
+            <action android:name="com.example.movienight.MovieService.MOVIES" />
+        </intent-filter>
+    </receiver>
     </application>
 
 </manifest>
