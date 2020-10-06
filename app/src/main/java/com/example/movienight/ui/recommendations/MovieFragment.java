@@ -65,7 +65,7 @@ class RetrieveBitmapFromUrlTask extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String... urls) {
         String url = urls[0];
         try{
-            URL conn = new URL("http://image.tmdb.org/t/p/w185//" + url);
+            URL conn = new URL("https://image.tmdb.org/t/p/w185//" + url);
             Bitmap bmp = BitmapFactory.decodeStream(conn.openConnection().getInputStream());
             return bmp;
         }
