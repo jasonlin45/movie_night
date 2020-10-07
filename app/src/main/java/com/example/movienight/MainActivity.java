@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInAnonymously:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, "Authentication successful.",
-                                    Toast.LENGTH_SHORT).show();
                             try {
                                 getApiKey(user);
                             } catch (IOException e) {
@@ -127,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
                             // Store ApiKey
                             GenreService g = new GenreService(getApplicationContext());
                             g.setApiKey(ApiKey);
-
+                            Toast.makeText(MainActivity.this, "Authentication successful.",
+                                    Toast.LENGTH_SHORT).show();
                         } catch (ExecutionException | InterruptedException e) {
                             e.printStackTrace();
                         }
